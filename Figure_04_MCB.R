@@ -13,5 +13,5 @@ par(mar = c(5.1, 4.1, 4.1, 2.1))
 
 ##################################################### MCB RMSE ##################################################### 
 setwd('Climate_Policy_Uncertainty_Forecasting/Dataset/MCB')
-err <- read_excel('Results Combined X - RMSE.xlsx')
-tsutils::nemenyi(err, plottype = "mcb", main = 'MCB Plot for RMSE Metric', conf.level = 0.85)
+err <- read_excel('Results Combined - RMSE - Final.xlsx')
+tsutils::nemenyi(err, plottype = "mcb", main = 'MCB Plot for RMSE Metric', conf.level = 0.8)
