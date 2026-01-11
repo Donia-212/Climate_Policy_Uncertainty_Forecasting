@@ -18,29 +18,6 @@ library(nonlinearTseries)
 library(seastests)
 library(car)
 
-setwd('Climate_Policy_Uncertainty_Forecasting/Dataset/Data')
-cpu_data <- read_xlsx('CPU_Data.xlsx')
-cpu_data$Date <- as.Date(cpu_data$Date)
-cpu_data$Date <- ydm(cpu_data$Date)
-covariates_reduced <- read_xlsx('CPU_Data_Reduced.xlsx') %>% select(-cpu_index)  
-
-sum(is.na(cpu_data))
-colSums(is.na(cpu_data))
-cpu_data[is.na(cpu_data)] <- 0
-sum(is.na(cpu_data))
-
-cpu <- cpu_data[,139]
-cpu <- unlist(cpu)
-
-n = 24
-set.seed(100)
-
-train_24 <- cpu_data[1:(nrow(cpu_data) - n), 2:ncol(cpu_data)]
-train_reg_reduced_24 <- as.matrix(covariates_reduced[1:(nrow(cpu_data) - n), ])
-
-test_24 <- cpu[(length(cpu) - n + 1):length(cpu)]
-test_reg_reduced_24 <- as.matrix(covariates_reduced[(nrow(covariates_reduced) - n + 1):nrow(covariates_reduced),])
-
 ##################################################### Functions #####################################################
 
 SUMMARY <- function(data) {
@@ -80,4 +57,67 @@ SUMMARY <- function(data) {
   return(summ)
 }
 
+################################################## Primary US CPU ################################################## 
+
+setwd('Climate_Policy_Uncertainty_Forecasting/Dataset/Data')
+cpu_data <- read_xlsx('CPU_Data.xlsx')
+cpu_data$Date <- as.Date(cpu_data$Date)
+cpu_data$Date <- ydm(cpu_data$Date)
+covariates_reduced <- read_xlsx('CPU_Data_Reduced.xlsx') %>% select(-cpu_index)  
+
+sum(is.na(cpu_data))
+colSums(is.na(cpu_data))
+cpu_data[is.na(cpu_data)] <- 0
+sum(is.na(cpu_data))
+
+cpu <- cpu_data[,139]
+cpu <- unlist(cpu)
+
+n = 24
+set.seed(100)
+train_24 <- cpu_data[1:(nrow(cpu_data) - n), 2:ncol(cpu_data)]
 SUMMARY(train_24$cpu_index)
+
+
+################################################## Alternate US CPU ################################################## 
+
+cpu_data <- read_excel('GCPU_Data.xlsx')[1:282,1:2] 
+cpu_data$Date <- as.Date(cpu_data$date)
+cpu_data$Date <- ymd(cpu_data$Date)
+covariates_reduced <- read_xlsx('CPU_Data_Reduced.xlsx') %>% select(-cpu_index)
+covariates_reduced <- covariates_reduced[154:nrow(covariates_reduced),]  
+
+sum(is.na(cpu_data))
+colSums(is.na(cpu_data))
+cpu_data[is.na(cpu_data)] <- 0
+sum(is.na(cpu_data))
+
+cpu <- cpu_data[,2]
+cpu <- unlist(cpu)
+
+n = 24
+set.seed(100)
+train_24 <- cpu_data[1:(nrow(cpu_data) - n), 2:ncol(cpu_data)]
+SUMMARY(train_24$CPU_US)
+
+
+################################################## Global CPU ################################################## 
+
+cpu_data <- read_excel('GCPU_Data.xlsx')[1:282,c(1,4)] 
+cpu_data$Date <- as.Date(cpu_data$date)
+cpu_data$Date <- ymd(cpu_data$Date)
+covariates_reduced <- read_xlsx('CPU_Data_Reduced.xlsx') %>% select(-cpu_index)
+covariates_reduced <- covariates_reduced[154:nrow(covariates_reduced),]  
+
+sum(is.na(cpu_data))
+colSums(is.na(cpu_data))
+cpu_data[is.na(cpu_data)] <- 0
+sum(is.na(cpu_data))
+
+cpu <- cpu_data[,2]
+cpu <- unlist(cpu)
+
+n = 24
+set.seed(100)
+train_24 <- cpu_data[1:(nrow(cpu_data) - n), 2:ncol(cpu_data)]
+SUMMARY(train_24$`GCPU(PPP-adjusted GDP)`)
