@@ -44,77 +44,6 @@ evaluate <- function(test,pred,model){
 }
 
 
-##################################################### Horizon 1 #####################################################
-
-n = 1
-set.seed(100)
-
-train_1 <- cpu_data[1:(nrow(cpu_data) - n), 2:ncol(cpu_data)]
-train_reg_reduced_1 <- as.matrix(covariates_reduced[1:(nrow(cpu_data) - n), ])
-
-test_1 <- cpu[(length(cpu) - n + 1):length(cpu)]
-test_reg_reduced_1 <- as.matrix(covariates_reduced[(nrow(covariates_reduced) - n + 1):nrow(covariates_reduced),])
-
-model_evaluate_1 <- tibble()  
-predict_1 <- tibble(Date = as.Date(cpu_data$Date[nrow(train_1) + 1:length(test_1)]))  
-
-
-# ARFIMA
-arfima_1 <- arfima(train_1$cpu_index, xreg = train_reg_reduced_1)
-arfima_1_pred <- forecast(arfima_1, h = n, xreg = test_reg_reduced_1)
-model_evaluate_1 <- rbind(model_evaluate_1, evaluate(test_1, arfima_1_pred$mean, model = 'ARFIMA'))
-predict_1 <- predict_1 %>% mutate('ARFIMA' = arfima_1_pred$mean)
-
-
-# ARIMA
-arima_1 <- auto.arima(train_1$cpu_index, xreg = train_reg_reduced_1)
-arima_1_pred <- forecast(arima_1, h = n, xreg = test_reg_reduced_1)
-model_evaluate_1 <- rbind(model_evaluate_1, evaluate(test_1, arima_1_pred$mean,  model = 'ARIMA'))
-predict_1 <- predict_1 %>% mutate('ARIMA' = arima_1_pred$mean)
-
-
-# ARNN
-arnn_1 <- nnetar(train_1$cpu_index, xreg = train_reg_reduced_1, MaxNWts = 5000)
-arnn_1_pred <- forecast(arnn_1, h = n, xreg = test_reg_reduced_1)
-model_evaluate_1 <- rbind(model_evaluate_1, evaluate(test_1, arnn_1_pred$mean,  model = 'ARNN'))
-predict_1 <- predict_1 %>% mutate('ARNN' = arnn_1_pred$mean)
-
-
-# BSTS
-ss <- AddLocalLevel(list(), train_1$cpu_index)
-ss <- AddAutoAr(ss, train_1$cpu_index)
-ss <- AddSeasonal(ss, train_1$cpu_index, nseasons = 12)
-bsts_1 <- bsts(cpu_index ~ ., 
-               state.specification = ss,
-               niter = 1000,
-               ping = 100,
-               seed = 100,
-               data = as.data.frame(cbind(train_1$cpu_index, train_reg_reduced_1)) %>% rename('cpu_index' = V1))
-bsts_1_pred <- predict(bsts_1, horizon = n, burn = SuggestBurn(.1, bsts_1), newdata = test_reg_reduced_1)
-model_evaluate_1 <- rbind(model_evaluate_1, evaluate(test_1, bsts_1_pred$mean, model = 'BSTS'))
-predict_1 <- predict_1 %>% mutate('BSTS' = bsts_1_pred$mean)
-
-setwd('Climate_Policy_Uncertainty_Forecasting/Dataset/Dataset_Deep_Learning_Models_Forecasts/Models - Macroeconomic')
-
-# NBEATS
-cpu_1_NBEATS <- unlist(read_csv('NBEATS_1.csv')[2])  
-model_evaluate_1 <- rbind(model_evaluate_1, evaluate(test_1, cpu_1_NBEATS, model = 'NBEATS'))
-
-# NHiTS
-cpu_1_NHiTS <- unlist(read_csv('NHiTS_1.csv')[2])
-model_evaluate_1 <- rbind(model_evaluate_1, evaluate(test_cpu_1, cpu_1_NHiTS, model = 'NHiTS'))
-
-# DLinear
-cpu_1_Dlinear <- unlist(read_csv('DLinear_1.csv')[2]) 
-model_evaluate_1 <- rbind(model_evaluate_1, evaluate(test_cpu_1, cpu_1_Dlinear, model = 'DLinear'))
-
-# NLinear
-cpu_1_Nlinear <- unlist(read_csv('NLinear_1.csv')[2]) 
-model_evaluate_1 <- rbind(model_evaluate_1, evaluate(test_cpu_1, cpu_1_Nlinear, model = 'NLinear'))
-
-write.csv(model_evaluate_1, 'Horizon 1.csv', row.names = FALSE)
-write.csv(predict_1, 'Forecast 1.csv', row.names = FALSE)
-
 ##################################################### Horizon 3 #####################################################
 
 n = 3
@@ -164,23 +93,25 @@ bsts_3_pred <- predict(bsts_3, horizon = n, burn = SuggestBurn(.1, bsts_3), newd
 model_evaluate_3 <- rbind(model_evaluate_3, evaluate(test_3, bsts_3_pred$mean, model = 'BSTS'))
 predict_3 <- predict_3 %>% mutate('BSTS' = bsts_3_pred$mean)
 
-setwd('Climate_Policy_Uncertainty_Forecasting/Dataset/Dataset_Deep_Learning_Models_Forecasts/Models - Macroeconomic')
+
+setwd('Climate_Policy_Uncertainty_Forecasting/Dataset/Dataset_Deep_Learning_Models_Forecasts/Models - Macroeconomic /US Primary')
+
 
 # NBEATS
 cpu_3_NBEATS <- unlist(read_csv('NBEATS_3.csv')[2])  
 model_evaluate_3 <- rbind(model_evaluate_1, evaluate(test_3, cpu_3_NBEATS, model = 'NBEATS'))
 
 # NHiTS
-cpu_1_NHiTS <- unlist(read_csv('NHiTS_3.csv')[2])
-model_evaluate_1 <- rbind(model_evaluate_3, evaluate(test_cpu_3, cpu_3_NHiTS, model = 'NHiTS'))
+cpu_3_NHiTS <- unlist(read_csv('NHiTS_3.csv')[2])
+model_evaluate_3 <- rbind(model_evaluate_3, evaluate(test_3, cpu_3_NHiTS, model = 'NHiTS'))
 
 # DLinear
 cpu_3_Dlinear <- unlist(read_csv('DLinear_3.csv')[2]) 
-model_evaluate_3 <- rbind(model_evaluate_3, evaluate(test_cpu_3, cpu_3_Dlinear, model = 'DLinear'))
+model_evaluate_3 <- rbind(model_evaluate_3, evaluate(test_3, cpu_3_Dlinear, model = 'DLinear'))
 
 # NLinear
 cpu_3_Nlinear <- unlist(read_csv('NLinear_3.csv')[2]) 
-model_evaluate_3 <- rbind(model_evaluate_3, evaluate(test_cpu_3, cpu_3_Nlinear, model = 'NLinear'))
+model_evaluate_3 <- rbind(model_evaluate_3, evaluate(test_3, cpu_3_Nlinear, model = 'NLinear'))
 
 write.csv(model_evaluate_3, 'Horizon 3.csv', row.names = FALSE)
 write.csv(predict_3, 'Forecast 3.csv', row.names = FALSE)
@@ -235,7 +166,9 @@ bsts_6_pred <- predict(bsts_6, horizon = n, burn = SuggestBurn(.1, bsts_6), newd
 model_evaluate_6 <- rbind(model_evaluate_6, evaluate(test_6, bsts_6_pred$mean, model = 'BSTS'))
 predict_6 <- predict_6 %>% mutate('BSTS' = bsts_6_pred$mean)
 
-setwd('Climate_Policy_Uncertainty_Forecasting/Dataset/Dataset_Deep_Learning_Models_Forecasts/Models - Macroeconomic')
+
+setwd('Climate_Policy_Uncertainty_Forecasting/Dataset/Dataset_Deep_Learning_Models_Forecasts/Models - Macroeconomic /US Primary')
+
 
 # NBEATS
 cpu_6_NBEATS <- unlist(read_csv('NBEATS_6.csv')[2])  
@@ -243,15 +176,15 @@ model_evaluate_6 <- rbind(model_evaluate_6, evaluate(test_6, cpu_6_NBEATS, model
 
 # NHiTS
 cpu_6_NHiTS <- unlist(read_csv('NHiTS_6.csv')[2])
-model_evaluate_6 <- rbind(model_evaluate_6, evaluate(test_cpu_6, cpu_6_NHiTS, model = 'NHiTS'))
+model_evaluate_6 <- rbind(model_evaluate_6, evaluate(test_6, cpu_6_NHiTS, model = 'NHiTS'))
 
 # DLinear
 cpu_6_Dlinear <- unlist(read_csv('DLinear_6.csv')[2]) 
-model_evaluate_6 <- rbind(model_evaluate_6, evaluate(test_cpu_6, cpu_6_Dlinear, model = 'DLinear'))
+model_evaluate_6 <- rbind(model_evaluate_6, evaluate(test_6, cpu_6_Dlinear, model = 'DLinear'))
 
 # NLinear
 cpu_6_Nlinear <- unlist(read_csv('NLinear_6.csv')[2]) 
-model_evaluate_6 <- rbind(model_evaluate_6, evaluate(test_cpu_6, cpu_6_Nlinear, model = 'NLinear'))
+model_evaluate_6 <- rbind(model_evaluate_6, evaluate(test_6, cpu_6_Nlinear, model = 'NLinear'))
 
 write.csv(model_evaluate_6, 'Horizon 6.csv', row.names = FALSE)
 write.csv(predict_6, 'Forecast 6.csv', row.names = FALSE)
@@ -305,7 +238,9 @@ bsts_12_pred <- predict(bsts_12, horizon = n, burn = SuggestBurn(.1, bsts_12), n
 model_evaluate_12 <- rbind(model_evaluate_12, evaluate(test_12, bsts_12_pred$mean, model = 'BSTS'))
 predict_12 <- predict_12 %>% mutate('BSTS' = bsts_12_pred$mean)
 
-setwd('Climate_Policy_Uncertainty_Forecasting/Dataset_Deep_Learning_Models_Forecasts/Models - Macroeconomic')
+
+setwd('Climate_Policy_Uncertainty_Forecasting/Dataset/Dataset_Deep_Learning_Models_Forecasts/Models - Macroeconomic /US Primary')
+
 
 # NBEATS
 cpu_12_NBEATS <- unlist(read_csv('NBEATS_12.csv')[2])  
@@ -313,15 +248,15 @@ model_evaluate_12 <- rbind(model_evaluate_12, evaluate(test_12, cpu_12_NBEATS, m
 
 # NHiTS
 cpu_12_NHiTS <- unlist(read_csv('NHiTS_12.csv')[2])
-model_evaluate_12 <- rbind(model_evaluate_12, evaluate(test_cpu_12, cpu_12_NHiTS, model = 'NHiTS'))
+model_evaluate_12 <- rbind(model_evaluate_12, evaluate(test_12, cpu_12_NHiTS, model = 'NHiTS'))
 
 # DLinear
 cpu_12_Dlinear <- unlist(read_csv('DLinear_12.csv')[2]) 
-model_evaluate_12 <- rbind(model_evaluate_12, evaluate(test_cpu_12, cpu_12_Dlinear, model = 'DLinear'))
+model_evaluate_12 <- rbind(model_evaluate_12, evaluate(test_12, cpu_12_Dlinear, model = 'DLinear'))
 
 # NLinear
 cpu_12_Nlinear <- unlist(read_csv('NLinear_12.csv')[2]) 
-model_evaluate_12 <- rbind(model_evaluate_12, evaluate(test_cpu_12, cpu_12_Nlinear, model = 'NLinear'))
+model_evaluate_12 <- rbind(model_evaluate_12, evaluate(test_12, cpu_12_Nlinear, model = 'NLinear'))
 
 write.csv(model_evaluate_12, 'Horizon 12.csv', row.names = FALSE)
 write.csv(predict_12, 'Forecast 12.csv', row.names = FALSE)
@@ -377,7 +312,9 @@ bsts_24_pred <- predict(bsts_24, horizon = n, burn = SuggestBurn(.1, bsts_24), n
 model_evaluate_24 <- rbind(model_evaluate_24, evaluate(test_24, bsts_24_pred$mean, model = 'BSTS'))
 predict_24 <- predict_24 %>% mutate('BSTS' = bsts_24_pred$mean)
 
-setwd('Climate_Policy_Uncertainty_Forecasting/Dataset/Dataset_Deep_Learning_Models_Forecasts/Models - Macroeconomic')
+
+setwd('Climate_Policy_Uncertainty_Forecasting/Dataset/Dataset_Deep_Learning_Models_Forecasts/Models - Macroeconomic /US Primary')
+
 
 # NBEATS
 cpu_24_NBEATS <- unlist(read_csv('NBEATS_24.csv')[2])  
@@ -385,15 +322,15 @@ model_evaluate_24 <- rbind(model_evaluate_24, evaluate(test_24, cpu_24_NBEATS, m
 
 # NHiTS
 cpu_24_NHiTS <- unlist(read_csv('NHiTS_24.csv')[2])
-model_evaluate_24 <- rbind(model_evaluate_24, evaluate(test_cpu_24, cpu_24_NHiTS, model = 'NHiTS'))
+model_evaluate_24 <- rbind(model_evaluate_24, evaluate(test_24, cpu_24_NHiTS, model = 'NHiTS'))
 
 # DLinear
 cpu_24_Dlinear <- unlist(read_csv('DLinear_24.csv')[2]) 
-model_evaluate_24 <- rbind(model_evaluate_24, evaluate(test_cpu_24, cpu_24_Dlinear, model = 'DLinear'))
+model_evaluate_24 <- rbind(model_evaluate_24, evaluate(test_24, cpu_24_Dlinear, model = 'DLinear'))
 
 # NLinear
 cpu_24_Nlinear <- unlist(read_csv('NLinear_24.csv')[2]) 
-model_evaluate_24 <- rbind(model_evaluate_24, evaluate(test_cpu_24, cpu_24_Nlinear, model = 'NLinear'))
+model_evaluate_24 <- rbind(model_evaluate_24, evaluate(test_24, cpu_24_Nlinear, model = 'NLinear'))
 
 write.csv(model_evaluate_24, 'Horizon 24.csv', row.names = FALSE)
 write.csv(predict_24, 'Forecast 24.csv', row.names = FALSE)
