@@ -6,6 +6,7 @@ library(fable)
 library(readxl)
 library(stats)
 library(patchwork)
+library(gridExtra)
 
 ##################################################### Google Trends: Figure 02 #####################################################
 
