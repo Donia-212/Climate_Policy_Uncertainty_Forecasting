@@ -1,10 +1,10 @@
-# Reproducibility Checks: Forecasting Climate Policy Uncertainty: Evidence from the United States
+# Reproducibility Checks: Forecasting Climate Policy Uncertainty
 
-* To generate "Table 2: Summary statistics of the training United States CPU index series.", please refer to [Table_02_Summary_Statistics.R](https://github.com/Donia-212/Forecasting-the-US-Climate-Policy-Uncertainty-using-Bayesian-Machine-Learning/blob/main/Table_02_Summary_Statistics.R).
+* To generate "Table 2: Summary statistics for the training samples of the primary US, alternate US, and Global CPU indices.", please refer to [Table_02_Summary_Statistics.R](https://github.com/Donia-212/Forecasting-the-US-Climate-Policy-Uncertainty-using-Bayesian-Machine-Learning/blob/main/Table_02_Summary_Statistics.R).
 
-* To generate "Table 3: Statistical characteristics of the training United States CPU index series.", please refer to [Table_03_Global_Characteristics.R](https://github.com/Donia-212/Forecasting-the-US-Climate-Policy-Uncertainty-using-Bayesian-Machine-Learning/blob/main/Table_03_Global_Characteristics.R).
+* To generate "Table 3: Statistical characteristics for the training samples of the primary US, alternate US, and Global CPU indices.", please refer to [Table_03_Global_Characteristics.R](https://github.com/Donia-212/Forecasting-the-US-Climate-Policy-Uncertainty-using-Bayesian-Machine-Learning/blob/main/Table_03_Global_Characteristics.R).
 
-* To view "Figure 1: Target training series (April 1987 to June 2021), including its (a) temporal evolution along with its ACF and PACF plots, and (b) STL decomposition of the series into trend, seasonal, and remainder components.", please refer to [Figure_01_CPU_Time_Series_Plots.R](https://github.com/Donia-212/Forecasting-the-US-Climate-Policy-Uncertainty-using-Bayesian-Machine-Learning/blob/main/Figure_01_CPU_Time_Series_Plots.R).
+* To view "Table 4: Time series of the training samples for the CPU indices, together with their ACF and PACF plots.", please refer to [Table_04_CPU_TS_ACF_PACF_Plots.R](https://github.com/Donia-212/Forecasting-the-US-Climate-Policy-Uncertainty-using-Bayesian-Machine-Learning/blob/main/Figure_01_CPU_Time_Series_Plots.R).
 
 * To view "Figure 2: Impulse response functions generated via the local projections method, quantifying the CPU index's dynamic reactions to shocks in macroeconomic and financial cycle variables. The reaction is represented by the solid black line, and the 95\% confidence intervals are represented by the gray shaded regions. The dashed black line displays the zero line. The sample period runs from April 1987 to June 2023.", please refer to [Figure_02_Impulse_Response_Functions.R](https://github.com/Donia-212/Forecasting-the-US-Climate-Policy-Uncertainty-using-Bayesian-Machine-Learning/blob/main/Figure_02_Impulse_Response_Functions.R).
 
