@@ -95,7 +95,7 @@ model_evaluate_3 <- rbind(model_evaluate_3, evaluate(test_3, bsts_3_pred$mean, m
 predict_3 <- predict_3 %>% mutate('BSTS' = bsts_3_pred$mean)
 
 
-setwd('Climate_Policy_Uncertainty_Forecasting/Dataset/Dataset_Deep_Learning_Models_Forecasts/Models - Macroeconomic /US Primary')
+setwd('Climate_Policy_Uncertainty_Forecasting/Dataset/Dataset_Deep_Learning_Models_Forecasts/Models - Macroeconomic/US Primary')
 
 
 # NBEATS
@@ -168,7 +168,7 @@ model_evaluate_6 <- rbind(model_evaluate_6, evaluate(test_6, bsts_6_pred$mean, m
 predict_6 <- predict_6 %>% mutate('BSTS' = bsts_6_pred$mean)
 
 
-setwd('Climate_Policy_Uncertainty_Forecasting/Dataset/Dataset_Deep_Learning_Models_Forecasts/Models - Macroeconomic /US Primary')
+setwd('Climate_Policy_Uncertainty_Forecasting/Dataset/Dataset_Deep_Learning_Models_Forecasts/Models - Macroeconomic/US Primary')
 
 
 # NBEATS
@@ -240,7 +240,7 @@ model_evaluate_12 <- rbind(model_evaluate_12, evaluate(test_12, bsts_12_pred$mea
 predict_12 <- predict_12 %>% mutate('BSTS' = bsts_12_pred$mean)
 
 
-setwd('Climate_Policy_Uncertainty_Forecasting/Dataset/Dataset_Deep_Learning_Models_Forecasts/Models - Macroeconomic /US Primary')
+setwd('Climate_Policy_Uncertainty_Forecasting/Dataset/Dataset_Deep_Learning_Models_Forecasts/Models - Macroeconomic/US Primary')
 
 
 # NBEATS
@@ -314,7 +314,7 @@ model_evaluate_24 <- rbind(model_evaluate_24, evaluate(test_24, bsts_24_pred$mea
 predict_24 <- predict_24 %>% mutate('BSTS' = bsts_24_pred$mean)
 
 
-setwd('Climate_Policy_Uncertainty_Forecasting/Dataset/Dataset_Deep_Learning_Models_Forecasts/Models - Macroeconomic /US Primary')
+setwd('Climate_Policy_Uncertainty_Forecasting/Dataset/Dataset_Deep_Learning_Models_Forecasts/Models - Macroeconomic/US Primary')
 
 
 # NBEATS
