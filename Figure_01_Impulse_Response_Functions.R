@@ -10,7 +10,7 @@ library(readxl)
 setwd('Climate_Policy_Uncertainty_Forecasting/Dataset/Data')
 getwd()
 
-all_data <- read_xlsx("CPU_Data_Reduced.xlsx")
+all_data <- read_xlsx("CPU_Data_Reduced.xlsx")[1:411,]
 str(all_data)
 
 # Convert Date into Datetime Value
